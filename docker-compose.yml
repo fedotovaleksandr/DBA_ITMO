@@ -1,0 +1,34 @@
+version: '3'
+services:
+  # Our PostgreSQL service:
+  departaments:
+    image: postgres:10.1
+    ports:
+      # We'll bind our host's port 8000 to postgres's port 5432, so we can use
+      # our database IDEs with it:
+      - 8000:5432
+    volumes:
+      # Mount the DB dumps folder into the container, to be able to create & access database dumps:
+      - ./departaments/dumps:/dumps
+      - ./departaments/pgfiles:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dapartament1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  # Our PostgreSQL service:
+  center:
+    build:
+      context: ./
+      dockerfile: ./center/Dockerfile
+    ports:
+      # We'll bind our host's port 8000 to postgres's port 5432, so we can use
+      # our database IDEs with it:
+      - 8001:5432
+    volumes:
+      # Mount the DB dumps folder into the container, to be able to create & access database dumps:
+      - ./center/dumps:/dumps
+      - ./center/pgfiles:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: center
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
